@@ -1,0 +1,45 @@
+// temp vars are in temporary callback memory.
+temp var touchOccupied: Boolean
+
+let minEffectTime = 0.02
+let textureJudgeLine = 41_000
+
+script Stage {
+    // You can declare let bindings in a script body too.
+    let clipEmpty = Clip(5)
+
+    // Scripts can contain variables which are stored in entity memory.
+    // These do take an initializer and are initialized in order.
+    var judgeLineAlpha = 0.5
+
+    var judgeLineQuad = centerRectangle(
+        Point(0, -0.6),
+        halfLength = aspectRatio,
+        halfWidth = 0.02,
+    )
+
+    callback shouldSpawn {
+        EntityInfo(entityIndex = 0).despawned()
+    }
+
+    callback @1 touch {
+        judgeLineAlpha = 1
+
+        if (touchStarted && !touchOccupied) {
+            clipEmpty.play(minEffectTime)
+        }
+    }
+
+    callback updateParallel {
+        // Named arguments can also be mixed with unnamed arguments
+        // as long as the order is correct.
+        // That is, the call would remain correct if the name was removed.
+        judgeLineQuad.draw(textureJudgeLine, z = 0, judgeLineAlpha)
+
+        // An assigment is not a Boolean or Integer value,
+        // so the return value of this callback is 0/false
+        judgeLineAlpha = 0.5
+    }
+}
+
+archetype Stage -> Stage()

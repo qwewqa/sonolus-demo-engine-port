@@ -1,0 +1,82 @@
+let textureNote = 1_006
+let textureEffectCF = 32_006
+
+script Note {
+    // Data variables come from archetype/entity data.
+    // They must be raw (Boolean/Number) types and take no initializer.
+    data var noteTime: Number
+
+    let waiting = 0
+    let terminated = 1
+
+    let perfectWindow = 0.05
+    let greatWindow = 0.1
+    let goodWindow = 0.15
+
+    // Entity variables are allowed to have no initializer.
+    // In this case, they take on the default, all zeros value
+    var inputState: Number
+
+    callback shouldSpawn {
+        noteTime - time <= noteScreenTime
+    }
+
+    callback touch {
+        // Temporary variables (different than temp variables)
+        // may be declared in callbacks and functions.
+        var actualTapTime = (time - inputOffset)
+        if (
+            inputState == waiting &&
+            noteTime - actualTapTime <= goodWindow &&
+            touchStarted &&
+            !touchOccupied
+        ) {
+            touchOccupied = true
+            inputState = terminated
+            entityJudgement = judgeSimple(actualTapTime, noteTime, perfectWindow, greatWindow, goodWindow)
+            entityBucket = 1
+            entityBucketValue = 1000 * (actualTapTime - noteTime)
+
+            // A script can be spawned by calling it like a function.
+            // Init variables can be set via named arguments.
+            TapEffect(effectTime = time)
+
+            Clip(entityJudgement).play(minEffectTime)
+        }
+    }
+
+    callback updateParallel {
+        // Note that proper short circuiting is not yet implemented.
+        var noteDead = inputState == terminated || (time - inputOffset - noteTime) > goodWindow
+        if (!noteDead) {
+            var noteY = ((noteTime - time) / noteScreenTime).lerp(-0.6, 1.2)
+            centerSquare(Point(0, noteY), 0.2).draw(textureNote, z = 2, 1)
+        }
+        noteDead
+    }
+}
+
+// note archetypes have judgements.
+note archetype Note -> Note()
+
+// Multiple scripts in a file is ok.
+script TapEffect {
+    let animationDuration = 0.3
+    let maxSize = 0.4
+    let effectCenter = Point(0, -0.6)
+
+    // init vars can be initialized through spawn calls
+    init var effectTime: Number
+
+    callback updateParallel {
+        var liveDuration = time - effectTime
+        var progress = liveDuration / animationDuration
+        if (progress <= 1) {
+            let effectScale = progress
+            let effectAlpha = 1 - effectScale
+            var effectSize = effectScale * maxSize
+            centerSquare(effectCenter, effectSize).draw(textureEffectCF, z = 1, effectAlpha)
+        }
+        progress > 1
+    }
+}

@@ -1,0 +1,130 @@
+// Comments start with two slashes
+/*
+Block comments are also supported
+*/
+
+// The package declaration goes at the top of the file.
+// It might look something like `package a.b.c.d`
+// It may be omitted, in which case it defaults to `engine`.
+// It's largely unnecessary to specify it outside of the standard library files.
+
+// Import statements go here.
+// They either specify a specific declaration like `import pkg.declaration`
+// or import an entire package like `import pkg.*`.
+// It's largely unnecessary to have any imports since there is always an implicit
+// standard library import.
+
+// level variables are declared with the level modifier at the top level and do not take an initializer.
+level var noteScreenTime: Number
+level var screenX1: Number
+level var screenX2: Number
+
+// let declarations are allowed at the top level.
+// However, there are restrictions on what the expression can be.
+// Normally invalid identifiers can be used if they are wrapped in backticks.
+let noteSpeed = options.`#NOTE_SPEED`
+
+script Initialize {
+    callback updateSequential {
+        noteScreenTime = 5 / noteSpeed
+
+        screenX1 = -aspectRatio
+        screenX2 = aspectRatio
+
+        // struct and function calls support named arguments
+        menuUI = UIInfo(
+            anchorX = aspectRatio - 0.05,
+            anchorY = 0.95,
+            pivotX = 1,
+            pivotY = 1,
+            width = 0.15,
+            height = 0.15,
+            rotation = 0,
+            alpha = 1,
+            horizontalAlign = 0,
+            verticalAlign = 0,
+            background = true, // a trailing comma is optional
+        )
+
+        // You also have the option of doing this like
+        // judgementUI.anchorX = 0
+        // judgementUI.anchorY = -0.4
+        // etc.
+        judgementUI = UIInfo(
+            anchorX = 0,
+            anchorY = -0.4,
+            pivotX = 0.5,
+            pivotY = 0,
+            width = 0.8,
+            height = 0.2,
+            rotation = 0,
+            alpha = 1,
+            horizontalAlign = 0,
+            verticalAlign = 0,
+            background = false,
+        )
+
+        comboValueUI = UIInfo(
+            anchorX = aspectRatio * 0.7,
+            anchorY = 0,
+            pivotX = 0.5,
+            pivotY = 0,
+            width = 0.5,
+            height = 0.25,
+            rotation = 0,
+            alpha = 1,
+            horizontalAlign = 0,
+            verticalAlign = -1,
+            background = false,
+        )
+
+        comboTextUI = UIInfo(
+            anchorX = aspectRatio * 0.7,
+            anchorY = 0,
+            pivotX = 0.5,
+            pivotY = 1,
+            width = 0.5,
+            height = 0.15,
+            rotation = 0,
+            alpha = 1,
+            horizontalAlign = 0,
+            verticalAlign = 1,
+            background = false,
+        )
+
+        scoreBarUI = UIInfo(
+            anchorX = 0.05 - aspectRatio,
+            anchorY = 0.95,
+            pivotX = 0,
+            pivotY = 1,
+            width = 0.6,
+            height = 0.15,
+            rotation = 0,
+            alpha = 1,
+            horizontalAlign = -1,
+            verticalAlign = 0,
+            background = true,
+        )
+
+        scoreValueUI = UIInfo(
+            anchorX = 0.05 - aspectRatio,
+            anchorY = 0.8,
+            pivotX = 0,
+            pivotY = 1,
+            width = 0.6,
+            height = 0.15,
+            rotation = 0,
+            alpha = 1,
+            horizontalAlign = -1,
+            verticalAlign = 0,
+            background = false,
+        )
+
+        // Callbacks return the value of the final statement if it is a Number or Boolean.
+        true
+    }
+}
+
+// Archetypes are allowed to share names with any other declaration
+// except other archetypes.
+archetype Initialize -> Initialize()
