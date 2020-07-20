@@ -46,13 +46,16 @@ script Note {
     }
 
     callback updateParallel {
-        // Note that proper short circuiting is not yet implemented.
-        var noteDead = inputState == terminated || (time - inputOffset - noteTime) > goodWindow
-        if (!noteDead) {
+        // Functions can be declared in callback an other functions.
+        // They have access to all variables in the outer scope existing when they are called.
+        func display(): Boolean {
             var noteY = ((noteTime - time) / noteScreenTime).lerp(-0.6, 1.2)
             centerSquare(Point(0, noteY), 0.2).draw(textureNote, z = 2, 1)
+            false // won't despawn if display is called
         }
-        noteDead
+
+        // && and || short circuit
+        inputState == terminated || (time - inputOffset - noteTime) > goodWindow || display()
     }
 }
 
@@ -69,14 +72,16 @@ script TapEffect {
     init var effectTime: Number
 
     callback updateParallel {
-        var liveDuration = time - effectTime
-        var progress = liveDuration / animationDuration
-        if (progress <= 1) {
+        var progress = (time - effectTime) / animationDuration
+
+        func display(): Boolean {
             let effectScale = progress
             let effectAlpha = 1 - effectScale
             var effectSize = effectScale * maxSize
             centerSquare(effectCenter, effectSize).draw(textureEffectCF, z = 1, effectAlpha)
+            false
         }
-        progress > 1
+
+        progress > 1 || display()
     }
 }
