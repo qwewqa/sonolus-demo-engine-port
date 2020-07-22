@@ -38,7 +38,7 @@ script Note {
             entityBucketValue = 1000 * (actualTapTime - noteTime)
 
             // A script can be spawned by calling it like a function.
-            // Init variables can be set via named arguments.
+            // Spawn variables can be set via named arguments.
             TapEffect(effectTime = time)
 
             Clip(entityJudgement).play(minEffectTime)
@@ -68,8 +68,8 @@ script TapEffect {
     let maxSize = 0.4
     let effectCenter = Point(0, -0.6)
 
-    // init vars can be initialized through spawn calls
-    init var effectTime: Number
+    // spawn vars can be initialized through spawn calls
+    spawn var effectTime: Number
 
     callback updateParallel {
         var progress = (time - effectTime) / animationDuration
