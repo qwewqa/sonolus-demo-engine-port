@@ -32,6 +32,7 @@ script Initialize {
         screenX2 = aspectRatio
 
         // struct and function calls support named arguments
+        // they also can have default arguments
         menuUI = UIInfo(
             anchorX = aspectRatio - 0.05,
             anchorY = 0.95,
@@ -39,10 +40,6 @@ script Initialize {
             pivotY = 1,
             width = 0.15,
             height = 0.15,
-            rotation = 0,
-            alpha = 1,
-            horizontalAlign = 0,
-            verticalAlign = 0,
             background = true, // a trailing comma is optional
         )
 
@@ -57,11 +54,6 @@ script Initialize {
             pivotY = 0,
             width = 0.8,
             height = 0.2,
-            rotation = 0,
-            alpha = 1,
-            horizontalAlign = 0,
-            verticalAlign = 0,
-            background = false,
         )
 
         comboValueUI = UIInfo(
@@ -71,11 +63,7 @@ script Initialize {
             pivotY = 0,
             width = 0.5,
             height = 0.25,
-            rotation = 0,
-            alpha = 1,
-            horizontalAlign = 0,
             verticalAlign = -1,
-            background = false,
         )
 
         comboTextUI = UIInfo(
@@ -85,11 +73,7 @@ script Initialize {
             pivotY = 1,
             width = 0.5,
             height = 0.15,
-            rotation = 0,
-            alpha = 1,
-            horizontalAlign = 0,
             verticalAlign = 1,
-            background = false,
         )
 
         scoreBarUI = UIInfo(
@@ -99,10 +83,7 @@ script Initialize {
             pivotY = 1,
             width = 0.6,
             height = 0.15,
-            rotation = 0,
-            alpha = 1,
             horizontalAlign = -1,
-            verticalAlign = 0,
             background = true,
         )
 
@@ -113,11 +94,7 @@ script Initialize {
             pivotY = 1,
             width = 0.6,
             height = 0.15,
-            rotation = 0,
-            alpha = 1,
             horizontalAlign = -1,
-            verticalAlign = 0,
-            background = false,
         )
 
         // Callbacks return the value of the final statement if it is a Number or Boolean.
