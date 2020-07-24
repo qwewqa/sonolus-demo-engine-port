@@ -46,16 +46,14 @@ script Note {
     }
 
     callback updateParallel {
-        // Functions can be declared in callback an other functions.
-        // They have access to all variables in the outer scope existing when they are called.
-        func display(): Boolean {
+        // && and || short circuit
+        inputState == terminated ||
+        (time - inputOffset - noteTime) > goodWindow ||
+        run {
             var noteY = ((noteTime - time) / noteScreenTime).lerp(-0.6, 1.2)
             centerSquare(Point(0, noteY), 0.2).draw(textureNote, z = 2, 1)
             false // won't despawn if display is called
         }
-
-        // && and || short circuit
-        inputState == terminated || (time - inputOffset - noteTime) > goodWindow || display()
     }
 }
 
@@ -73,15 +71,12 @@ script TapEffect {
 
     callback updateParallel {
         var progress = (time - effectTime) / animationDuration
-
-        func display(): Boolean {
+        progress > 1 || run {
             let effectScale = progress
             let effectAlpha = 1 - effectScale
             var effectSize = effectScale * maxSize
             centerSquare(effectCenter, effectSize).draw(textureEffectCF, z = 1, effectAlpha)
             false
         }
-
-        progress > 1 || display()
     }
 }
